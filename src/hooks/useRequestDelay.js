@@ -34,23 +34,38 @@ function useRequestDelay(delayTime = 1000, initialData = []) {
             return rec.id === recordUpdated.id ? recordUpdated : rec;
         });
 
-        async function delayFunction() {
-            try {
-                setData(newRecords);
-                await delay(delayTime);
-                if (doneCallback) {
-                    doneCallback();
-                }
-            } catch (error) {
-                console.log("error thrown inside delayFunction", error);
-                if (doneCallback) {
-                    doneCallback();
-                }
-                setData(originalRecords);
-            }
-        }
+        
+        // async function delayFunction() { 
+            // try {
+                // await delay(delayTime);
+                // if (doneCallback) {
+                    // doneCallback();
+                // }
+                // setData(newRecords);
+            // } catch (error) {
+                // console.log("error throun inside delayFunction", error);
+            // }
+        // }
+        // 
+        // delayFunction();
+        
+        // async function delayFunction() {
+        //     try {
+        //         setData(newRecords);
+        //         await delay(delayTime);
+        //         if (doneCallback) {
+        //             doneCallback();
+        //         }
+        //     } catch (error) {
+        //         console.log("error thrown inside delayFunction", error);
+        //         if (doneCallback) {
+        //             doneCallback();
+        //         }
+        //         setData(originalRecords);
+        //     }
+        // }
 
-        delayFunction();
+        // delayFunction();
     }
 
     return {

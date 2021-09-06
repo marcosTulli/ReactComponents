@@ -2,6 +2,7 @@ import React, { useState, useContext, memo} from "react";
 import {SpeakerFilterContext} from "./context/SpeakersFilterContext";
 import { SpeakerProvider, SpeakerContext} from "./context/SpeakerContext";
 import SpeakerDelete from "./SpeakerDelete"; 
+import ErrorBoundary from "./ErrorBoundary";
 
 function Session({ title, room }) {
   return (
@@ -49,7 +50,9 @@ function ImageWithFallback({ src, ...props }) {
 }
 
 function SpeakerImage() {
-  const { speaker: { id, first, last } } = useContext(SpeakerContext);
+  const { 
+    speaker: { id, first, last }
+   } = useContext(SpeakerContext);
   return (
     <div className="speaker-img d-flex flex-row justify-content-center align-items-center h-300">
       <ImageWithFallback
@@ -88,7 +91,7 @@ function SpeakerFavorite() {
           speaker.favorite === true ?
             "fa fa-star orange" : "fa fa-star-o orange"
         }
-        />{" "}
+        />{" "} 
         Favorite{" "}
         {inTransition ? (<span className="fas fa-circle-notch fa-spin"></span>) : null}
       </span>
@@ -105,7 +108,7 @@ function SpeakerDemographics() {
     company, 
     twitterHandle, 
     favorite
-   } = speaker;
+    } = speaker;
   return (
     <div className="speaker-info">
       <div className="d-flex justify-content-between mb-3">
@@ -116,7 +119,7 @@ function SpeakerDemographics() {
       <SpeakerFavorite />
       <div>
         <p className="card-description">
-          {bio}
+          {bio.substr(0,70)}
         </p>
         <div className="social d-flex flex-row mt-4">
           <div className="company">
@@ -133,9 +136,9 @@ function SpeakerDemographics() {
   );
 }
 
-const Speaker =  memo(function Speaker({ speaker, updateRecord, insertRecord, deleteRecord}) {
+const SpeakerNoErrorBoundary =  memo(function Speaker({ speaker, updateRecord, insertRecord, deleteRecord}) {
   const { showSessions } = useContext(SpeakerFilterContext);
-  console.log(`speaker: ${speaker.id} ${speaker.first} ${speaker.last}`);
+  // console.log(`speaker: ${speaker.id} ${speaker.first} ${speaker.last}`);
   return (
     <SpeakerProvider 
     speaker={speaker}
@@ -157,6 +160,14 @@ const Speaker =  memo(function Speaker({ speaker, updateRecord, insertRecord, de
     </SpeakerProvider>
   );
 }, areEqualSpeaker);
+
+function Speaker(props) {
+  return (
+    <ErrorBoundary>
+      <SpeakerNoErrorBoundary {...props}></SpeakerNoErrorBoundary>
+    </ErrorBoundary>
+  )
+}
 
 function areEqualSpeaker (prevProps, nextProps) { 
   return (prevProps.speaker.favorite === nextProps.speaker.favorite);

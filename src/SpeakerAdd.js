@@ -1,8 +1,13 @@
-function Speakeradd({ eventYear, insertRecord }) {
+import withAuth from './withAuth';
+
+function Speakeradd({ eventYear, insertRecord, loggedInUser }) {
+    
+    if( !loggedInUser || loggedInUser.length === 0) return null;
+
     return (
         <a href="#" className="addSes">
 
-            <i onClick={(e) => {
+            <i onClick={(e) => { 
                 e.preventDefault();
                 const firstLast = window.prompt('Enter first and last name', "");
                 const firstLastArray = firstLast.split(' ');
@@ -28,4 +33,4 @@ function Speakeradd({ eventYear, insertRecord }) {
     );
 }
 
-export default Speakeradd;
+export default withAuth(Speakeradd);
